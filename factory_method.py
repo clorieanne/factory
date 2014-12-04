@@ -53,7 +53,7 @@ class HTTPConnector(Connector):
     """Parses web content."""
     filenames = []
     soup = BeautifulStoneSoup(content)
-    links = soup.table.findAll('a')
+    links = soup.findAll('a')
     for link in links:
       filenames.append(link['href'])
     return '\n'.join(filenames)
@@ -104,8 +104,8 @@ class FTPPort(Port):
     return '21'
 
 if __name__ == '__main__':
-  domain = 'ftp.freebsd.org'
-  path = '/pub/FreeBSD/'
+  domain = 'localhost'#'ftp.freebsd.org'
+  path = ''#'/pub/FreeBSD/'
 
   protocol = input('Connecting to {}. Which Protocol to use? (0-http, 1-ftp): '.format(domain))
 
@@ -119,6 +119,6 @@ if __name__ == '__main__':
   try:
     content = connector.read(domain, path)
   except urllib2.URLError, e:
-    print 'Can not access resource with this method'
+    print str(e) #'Can not access resource with this method'
   else:
     print connector.parse(content)

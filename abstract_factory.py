@@ -87,7 +87,7 @@ class HTTPParser(Parser):
   def __call__(self, content):
     filenames = []
     soup = BeautifulStoneSoup(content)
-    links = soup.table.findAll('a')
+    links = soup.findAll('a')
     for link in links:
       filenames.append(link.text)
       return '\n'.join(filenames)
@@ -113,6 +113,7 @@ class Connector(object):
 
   def read(self, host, path):
     url = self.protocol + '://' + host + ':' + str(self.port) + path
+    # 
     print 'Connecting to ', url
     return urllib2.urlopen(url, timeout=2).read()
 
@@ -121,8 +122,9 @@ class Connector(object):
     pass
 
 if __name__ == '__main__':
-  domain = 'ftp.freebsd.org'
-  path = '/pub/FreeBSD/'
+  domain = 'localhost'
+  #path = '/pub/FreeBSD/'
+  path = ''
   protocol = input('Connecting to {}. Which Protocol to use? (0-http, 1-ftp): '.format(domain))
 
   if protocol == 0:
@@ -138,6 +140,6 @@ if __name__ == '__main__':
   try:
     content = connector.read(domain, path)
   except urllib2.URLError, e:
-    print 'Can not access resource with this method'
+    print str(e) #'Can not access resource with this method'
   else:
     print connector.parse(content)
